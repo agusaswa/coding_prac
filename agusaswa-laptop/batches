@@ -41,6 +41,3 @@ def test_cannot_allocate_if_not_same_sku() -> bool:
     '''
     batch_4, line_4 = make_batch_and_order("SMALL-CHAIR", 1, 9)
     assert batch_4.can_allocate(line_4) is False
-
-if __name__ == "__main__":
-    pytest.main(["-vv"])
