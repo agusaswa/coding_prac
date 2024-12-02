@@ -1,4 +1,46 @@
 import numpy as np
+from enum import Enum
+from collections import namedtuple
+import logging
+
+class LoadType(Enum):
+    POINT = "P"
+    DISTRIB = "w"
+
+class Load:
+    def __init__(self):
+        self._load_type = None
+        self._load_value= None
+        self._load_position = None
+
+    @property
+    def load_type(self):
+        return self._load_type
+    
+    @load_type.setter
+    def load_type(self, load_type:str):
+        if load_type not in LoadType._value2member_map_:
+            raise ValueError(f"Invalid load type: {load_type}. Must be one of {', '.join([lt.value for lt in LoadType])}")
+        self._load_type = load_type
+
+    def load_value(self, load_value: float):
+        if not isinstance(load_value, float):
+            raise ValueError(f"Invalid load value: {load_value}. Must be float")
+        self._load_value = load_value
+
+    @property
+    def load_position(self):
+        return self._load_position
+    
+    @load_position.setter
+    def load_position(self,position: float):
+        if self._load_type == LoadType.POINT:
+            if not isinstance(position, float):
+                raise ValueError(f"Invalid load position value: {position}. Must be float")
+        if self._load_type == LoadType.DISTRIB:
+            if not isinstance(position, list[float, float]):
+                raise ValueError(f"Invalid load position value: {position}. Must be list with two values of float")
+
 class ElemLoadInp:
 
     def __init__(
@@ -73,3 +115,17 @@ class ElemLoadInp:
         print(f"load_counter = {self.load_counter}")
 
         return V_res
+    
+def main():
+    try:
+        load1 = Load()
+        load1.load_type = "P"
+        load1.load_position = 0.5 
+    except ValueError as e:
+        logging.error(f"Error: {e}")
+    else:
+        print(load1.load_type)
+        print(load1.load_position)
+
+if __name__ == "__main__":
+    main()
