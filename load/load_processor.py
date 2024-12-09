@@ -31,10 +31,9 @@ class SDL_Data:
 
 @dataclass
 class SDL:
-    sdl_data: List[SDL_Data]  # List of SDL_Data objects
+    sdl_data: List[SDL_Data] 
 
     def magnitude(self) -> float:
-        # Calculate total magnitude by summing the magnitude of each SDL_Data in the list
         return sum(sdl.magnitude() for sdl in self.sdl_data)
     
 @dataclass
@@ -56,11 +55,12 @@ class Load:
         self.dead_load = dead_load
         self.live_load = live_load
         self.sdl = sdl if sdl is not None else SDL(sdl_data=[])
-    
+
     def total_load(self) -> float:
         total = sum(
-            load.magnitude() for load in 
-            [self.self_weight, self.dead_load, self.live_load, self.sdl] 
-            if load is not None  # Skip None objects
+            load.magnitude() for load in filter(
+                None, [self.self_weight, self.dead_load, self.live_load, self.sdl]
+                )
         )
         return total
+

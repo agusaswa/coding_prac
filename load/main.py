@@ -9,7 +9,6 @@ def main():
     sdl = lp.SDL([sdl_data1,sdl_data2])
     load = lp.Load(self_weight=sw,live_load=ll,sdl=sdl, dead_load=dl)
     print(load.total_load())
-    print(load.dead_load)
 
 if __name__ == "__main__":
     main()
