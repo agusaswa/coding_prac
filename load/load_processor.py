@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional,List
+from typing import Optional, List
 
 @dataclass
 class SelfWeight:
@@ -7,7 +7,7 @@ class SelfWeight:
     des_thickness: float
 
     def magnitude(self) -> float:
-        return self.unit_weight * self.des_thickness/1000
+        return self.unit_weight * self.des_thickness / 1000
 
 @dataclass
 class DeadLoad:
@@ -15,7 +15,7 @@ class DeadLoad:
     des_thickness: float
 
     def magnitude(self) -> float:
-        return self.unit_weight * self.des_thickness/1000
+        return self.unit_weight * self.des_thickness / 1000
 
 @dataclass
 class SDL_Data:
@@ -31,9 +31,10 @@ class SDL_Data:
 
 @dataclass
 class SDL:
-    sdl_data: List[SDL_Data]
+    sdl_data: List[SDL_Data]  # List of SDL_Data objects
 
     def magnitude(self) -> float:
+        # Calculate total magnitude by summing the magnitude of each SDL_Data in the list
         return sum(sdl.magnitude() for sdl in self.sdl_data)
     
 @dataclass
@@ -56,11 +57,10 @@ class Load:
         self.live_load = live_load
         self.sdl = sdl if sdl is not None else SDL(sdl_data=[])
     
-    def total_load(self):
-        total=sum(
-        load.magnitude() for load in 
-        [self.self_weight, self.dead_load, self.live_load, self.sdl] 
-        if load is not None
+    def total_load(self) -> float:
+        total = sum(
+            load.magnitude() for load in 
+            [self.self_weight, self.dead_load, self.live_load, self.sdl] 
+            if load is not None  # Skip None objects
         )
-        
         return total
