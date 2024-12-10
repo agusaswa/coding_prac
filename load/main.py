@@ -8,7 +8,8 @@ def main():
     sdl_data2 = lp.SDL_Data("Screed",25,150)
     sdl = lp.SDL([sdl_data1,sdl_data2])
     load = lp.Load(self_weight=sw,live_load=ll,sdl=sdl, dead_load=dl)
-    print(load.total_load())
+    lt = lp.LoadType
+    print(load.calc_load_for([lt.DEAD_LOAD,lt.SDL]))
 
 if __name__ == "__main__":
     main()
