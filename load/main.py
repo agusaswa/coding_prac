@@ -10,6 +10,7 @@ def main():
     load_rec1 = lc.LoadRecord(sw,dl,ll,sdl)
     lt = lc.LoadType
     print(lc.calculate_load(load_rec1,[lt.DEAD_LOAD,lt.SDL]))
+    print(lc.calculate_load(load_rec1))
 
 if __name__ == "__main__":
     main()
