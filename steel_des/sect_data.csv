@@ -1,0 +1,5 @@
+Section Type,Name,b,h,t_f,t_w,ext_dia,t
+UC,UC300,300,300,15,10,, 
+UC,UC400,400,400,20,15,, 
+CHS,CHS100x8.0,,,,,100,8 
+CHS,CHS200x10.0,,,,,200,10  
