@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Editor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+    <style>
+        #csv-editor {
+            width: 80%;
+            margin: 20px auto;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSV Editor</h1>
+    <div id="csv-editor"></div>
+    <button id="save-btn">Save CSV</button>
+    <script>
+        // Initial data for the table
+        const initialData = Array.from({ length: 5 }, () => ['', '', '']); // 5 empty rows, 3 empty columns
+
+        // Initialize Handsontable
+        const container = document.getElementById('csv-editor');
+        const hot = new Handsontable(container, {
+            data: initialData, // Start with 5 unique empty rows
+            colHeaders: true, // Automatically generate column headers (A, B, C, ...)
+            rowHeaders: true, // Enable row headers
+            licenseKey: 'non-commercial-and-evaluation', // Free license
+            minRows: 5, // Minimum rows
+            minCols: 3, // Minimum columns
+            stretchH: 'all', // Stretch columns to fit container width
+            contextMenu: [
+                'row_above', 
+                'row_below', 
+                'remove_row',
+                'col_left', 
+                'col_right', 
+                'remove_col',
+                'alignment', 
+                'undo', 
+                'redo'
+            ], // Enable full context menu (including add/remove rows/columns)
+            manualColumnResize: true, // Allow resizing columns
+            manualRowResize: true, // Allow resizing rows
+            fillHandle: true, // Enable the autofill/drag-down functionality
+        });
+
+        // Function to convert data into CSV format
+        function convertToCSV(data) {
+            return data.map(row => row.join(',')).join('\n');
+        }
+
+        // Save button logic
+        document.getElementById('save-btn').addEventListener('click', () => {
+            const tableData = hot.getData(); // Get the data from Handsontable
+            const csvData = convertToCSV(tableData); // Convert the data into CSV format
+
+            // Blob for offline saving
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
+            // Create a download link
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'data.csv'); // Filename for the CSV
+            link.style.display = 'none';
+            document.body.appendChild(link);
+
+            // Trigger the download
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
