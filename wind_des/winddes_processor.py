@@ -143,7 +143,7 @@ def calc_freewall_cpnet(l: float, h: float, corner: str, solidity: float) -> lis
     res_zone_dict_2 = {}
 
     # Logic for populating res_zone_dict_1 and res_zone_dict_2
-    if l > 4 * h:
+    if l >= 4 * h:
         res_zone_dict_1[0] = cpnet_res[1]
         res_zone_dict_1[0.3 * h] = cpnet_res[1]
         res_zone_dict_1[2 * h] = cpnet_res[2]
@@ -159,25 +159,172 @@ def calc_freewall_cpnet(l: float, h: float, corner: str, solidity: float) -> lis
         res_zone_dict_1[0] = cpnet_res[1]
         res_zone_dict_1[0.3 * h] = cpnet_res[1]
         res_zone_dict_1[2 * h] = cpnet_res[2]
-        res_zone_dict_1[4 * h] = cpnet_res[3]
+        res_zone_dict_1["remaining"] = cpnet_res[3]
 
         res_zone_dict_2[l] = cpnet_res[1]
         res_zone_dict_2[l - 0.3 * h] = cpnet_res[1]
         res_zone_dict_2[l - 2 * h] = cpnet_res[2]
-        res_zone_dict_2[l - 4 * h] = cpnet_res[2]
+        res_zone_dict_2["remaining"] = cpnet_res[3]
     elif l <= 2 * h:
         res_zone_dict_1[0] = cpnet_res[1]
         res_zone_dict_1[0.3 * h] = cpnet_res[1]
-        res_zone_dict_1[2 * h] = cpnet_res[2]
+        res_zone_dict_1["remaining"] = cpnet_res[2]
 
         res_zone_dict_2[l] = cpnet_res[1]
         res_zone_dict_2[l - 0.3 * h] = cpnet_res[1]
-        res_zone_dict_2[l - 2 * h] = cpnet_res[2]
+        res_zone_dict_2["remaining"] = cpnet_res[2]
 
     # Returning both dictionaries inside a list
     return [res_zone_dict_1, res_zone_dict_2]
 
+def calc_rectbuild_cpe10(h: float, d: float) -> dict:
+    walls_cpe10 = [
+    [-1.2, -0.8, -0.5, 0.8, -0.7],
+    [-1.2, -0.8, -0.5, 0.7, -0.3]
+    ]
+
+    zone_no = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
+    val_dict = {}
+
+    h_d = h/d
+    match h_d:
+        case h_d if h_d > 0.25:
+            val_dict[zone_no["A"]] = walls_cpe10[0][0]
+            val_dict[zone_no["B"]] = walls_cpe10[0][2]
+            val_dict[zone_no["C"]] = walls_cpe10[0][2]
+            val_dict[zone_no["D"]] = walls_cpe10[0][3]
+            val_dict[zone_no["E"]] = walls_cpe10[0][4]
+        case h_d if h_d <= 0.25:
+            val_dict[zone_no["A"]] = walls_cpe10[1][0]
+            val_dict[zone_no["B"]] = walls_cpe10[1][2]
+            val_dict[zone_no["C"]] = walls_cpe10[1][2]
+            val_dict[zone_no["D"]] = walls_cpe10[1][3]
+            val_dict[zone_no["E"]] = walls_cpe10[1][4]
     
+    return val_dict
+
+def calc_rectbuild_cpe1(h: float, d: float) -> dict:
+    walls_cpe1 = [
+    [-1.4, -1.1, -0.5, 1.0, -0.7],
+    [-1.4, -1.1, -0.5, 1.0, -0.3]
+    ]
+
+    zone_no = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
+    val_dict = {}
+
+    h_d = h/d
+    match h_d:
+        case h_d if h_d > 0.25:
+            val_dict[zone_no["A"]] = walls_cpe1[0][0]
+            val_dict[zone_no["B"]] = walls_cpe1[0][2]
+            val_dict[zone_no["C"]] = walls_cpe1[0][2]
+            val_dict[zone_no["D"]] = walls_cpe1[0][3]
+            val_dict[zone_no["E"]] = walls_cpe1[0][4]
+        case h_d if h_d <= 0.25:
+            val_dict[zone_no["A"]] = walls_cpe1[1][0]
+            val_dict[zone_no["B"]] = walls_cpe1[1][2]
+            val_dict[zone_no["C"]] = walls_cpe1[1][2]
+            val_dict[zone_no["D"]] = walls_cpe1[1][3]
+            val_dict[zone_no["E"]] = walls_cpe1[1][4]
+    
+    return val_dict
+
+def calc_rectbuild_cpe_interpolate(h: float, d: float, loaded_area: float) -> dict:
+    res_dict={}
+    if loaded_area <=1:
+        cpe = calc_rectbuild_cpe1(h,d)
+        for i in range(1,6):
+            res_dict[i] = cpe[i]
+    elif loaded_area <10:
+        cpe_1 = calc_rectbuild_cpe1(h,d)
+        cpe_10 = calc_rectbuild_cpe10(h,d)
+        for i in range(1,6):
+            res_dict[i] = cpe_10[i]+((10-loaded_area)/9*(cpe_1[i]-cpe_10[i]))
+    elif loaded_area >=10:
+        cpe = calc_rectbuild_cpe10(h,d)
+        for i in range(1,6):
+            res_dict[i] = cpe[i]
+    return res_dict
+
+def calc_rectbuild_cpe_angle_0_or_180(h: float, d: float, b: float, loaded_area: float) -> dict:
+    zone_no = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
+    res_dict = calc_rectbuild_cpe_interpolate(h,d,loaded_area)
+    res_side_dict = {}
+    e = min(b, (2*d))
+
+    res_side_dict[1] = res_dict[zone_no["D"]]
+    if e >= 5*d:
+        res_side_dict[2] = res_dict[zone_no["A"]]
+    elif e <d:
+        res_side_dict[2] = {
+            0:res_dict[zone_no["A"]],
+            0.2*e:res_dict[zone_no["A"]],
+            d-e:res_dict[zone_no["C"]],
+            d:res_dict[zone_no["A"]],
+            d-0.2*e:res_dict[zone_no["A"]],
+            e:res_dict[zone_no["C"]],
+            "mid":res_dict[zone_no["B"]]
+            }
+    elif e >=d:
+        res_side_dict[2] = {
+            0:res_dict[zone_no["A"]],
+            0.2*e:res_dict[zone_no["A"]],
+            d:res_dict[zone_no["A"]],
+            d-0.2*e:res_dict[zone_no["A"]],
+            "mid":res_dict[zone_no["B"]]
+            }
+
+    res_side_dict[3] = res_dict[zone_no["E"]]
+    res_side_dict[4] = res_side_dict[2]
+    res_angle_dict={
+        1:res_side_dict[1],
+        2:res_side_dict[2],
+        3:res_side_dict[3],
+        4:res_side_dict[4]
+        }
+    return res_angle_dict
+
+def calc_rectbuild_cpe_angle_90_or_270(h: float, d: float, b: float, loaded_area: float) -> dict:
+    zone_no = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
+    res_dict = calc_rectbuild_cpe_interpolate(h,d,loaded_area)
+    res_side_dict = {}
+    e = min(b, (2*d))
+
+    res_side_dict[2] = res_dict[zone_no["D"]]
+    if e >= 5*d:
+        res_side_dict[1] = res_dict[zone_no["A"]]
+    elif e <d:
+        res_side_dict[1] = {
+            0:res_dict[zone_no["A"]],
+            0.2*e:res_dict[zone_no["A"]],
+            d-e:res_dict[zone_no["C"]],
+            d:res_dict[zone_no["A"]],
+            d-0.2*e:res_dict[zone_no["A"]],
+            e:res_dict[zone_no["C"]],
+            "mid":res_dict[zone_no["B"]]
+            }
+    elif e >=d:
+        res_side_dict[1] = {
+            0:res_dict[zone_no["A"]],
+            0.2*e:res_dict[zone_no["A"]],
+            d:res_dict[zone_no["A"]],
+            d-0.2*e:res_dict[zone_no["A"]],
+            "mid":res_dict[zone_no["B"]]
+            }
+
+    res_side_dict[4] = res_dict[zone_no["E"]]
+    res_side_dict[3] = res_side_dict[1]
+    res_angle_dict={
+        1:res_side_dict[1],
+        2:res_side_dict[2],
+        3:res_side_dict[3],
+        4:res_side_dict[4]
+        }
+    return res_angle_dict
+
+
+
+
 
     
     
