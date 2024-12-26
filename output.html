@@ -66,14 +66,22 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-        }
-        .content .data-table th, .content .data-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            font-size: 14px;
             text-align: left;
         }
+        .content .data-table th, .content .data-table td {
+            border: 1px solid #000; /* Single-line border */
+            padding: 8px;
+        }
         .content .data-table th {
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* Light gray header */
+            font-weight: bold;
+        }
+        .content .data-table td {
+            background-color: #fff; /* White cell background */
+        }
+        .content .data-table tr:nth-child(even) td {
+            background-color: #f9f9f9; /* Alternate row color */
         }
         .page-break {
             page-break-after: always;
@@ -101,22 +109,7 @@
             </div>
         </div>
         <div class="content">
-            <h1>RC Beam Design Calculation</h1>
-<h2>Introduction</h2>
-<p>This document outlines the design calculations for an RC beam, considering various design parameters.</p>
-<hr />
-<h3>Load Calculations</h3>
-<p>The applied loads on the beam include dead loads, live loads, and additional external forces. These loads are summarized as follows:</p>
-<ul>
-<li>Dead load: 10 kN/m</li>
-<li>Live load: 5 kN/m</li>
-</ul>
-<hr />
-<h3>Design Results</h3>
-<ul>
-<li>Moment capacity: 50 kNm</li>
-<li>Shear capacity: 20 kN</li>
-</ul>
+            
             
         </div>
         <div class="empty-lines"></div>
@@ -139,28 +132,7 @@
         </div>
         <div class="content">
             
-            <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>Load Type</th>
-      <th>Value (kN/m)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Dead Load</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <td>Live Load</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td>Point Load</td>
-      <td>15</td>
-    </tr>
-  </tbody>
-</table>
+            
         </div>
         <div class="empty-lines"></div>
         <div class="page-break"></div>
@@ -181,49 +153,36 @@
             </div>
         </div>
         <div class="content">
-            <h1>RC Beam Design Calculation</h1>
-<h2>Introduction</h2>
-<p>This document outlines the design calculations for an RC beam, considering various design parameters.</p>
-<hr />
-<h3>Load Calculations</h3>
-<p>The applied loads on the beam include dead loads, live loads, and additional external forces. These loads are summarized as follows:</p>
-<ul>
-<li>Dead load: 20 kN/m</li>
-<li>Live load: 5 kN/m</li>
-</ul>
-<hr />
-<h3>Design Results</h3>
-<ul>
-<li>Moment capacity: 50 kNm</li>
-<li>Shear capacity: 20 kN</li>
-</ul>
-            <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>Load Type</th>
-      <th>Value (kN/m)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Dead Load</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <td>Live Load</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td>Point Load</td>
-      <td>15</td>
-    </tr>
-  </tbody>
-</table>
+            
+            
         </div>
         <div class="empty-lines"></div>
         <div class="page-break"></div>
     </div>
     
+    <div class="page">
+        <div class="header">
+            <div class="details">
+                <p>Designed by: GAA</p>
+                <p>Checked by: TYA</p>
+                <div class="row">
+                    <p>Title: RC Beam Design Calculation</p>
+                    <p>Date: 2024-12-26</p>
+                </div>
+            </div>
+            <div class="logo">
+                <img src="Company Logo.JPG" alt="Company Logo">
+            </div>
+        </div>
+        <div class="content">
+            
+            
+        </div>
+        <div class="empty-lines"></div>
+        <div class="page-break"></div>
+    </div>
+     <!-- Pages will be inserted here -->
+        <div class="empty-lines"></div> <!-- Empty lines added only at the bottom -->
     </div>
 </body>
 </html>

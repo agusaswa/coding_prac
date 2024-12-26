@@ -1,19 +1,9 @@
 import markdown
 import pandas as pd
 from datetime import datetime
+import csv
 
-# Convert Markdown to HTML
-def convert_markdown_to_html(markdown_file):
-    with open(markdown_file, 'r', encoding='utf-8') as file:
-        md_content = file.read()
-    return markdown.markdown(md_content)
-
-# Read CSV and convert to HTML table
-def convert_csv_to_html(csv_file):
-    df = pd.read_csv(csv_file)
-    return df.to_html(index=False)
-
-# Define HTML template
+# Define HTML template with improved table styling
 html_template = """
 <!DOCTYPE html>
 <html>
@@ -82,14 +72,22 @@ html_template = """
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-        }}
-        .content .data-table th, .content .data-table td {{
-            border: 1px solid #ddd;
-            padding: 8px;
+            font-size: 14px;
             text-align: left;
         }}
+        .content .data-table th, .content .data-table td {{
+            border: 1px solid #000; /* Single-line border */
+            padding: 8px;
+        }}
         .content .data-table th {{
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* Light gray header */
+            font-weight: bold;
+        }}
+        .content .data-table td {{
+            background-color: #fff; /* White cell background */
+        }}
+        .content .data-table tr:nth-child(even) td {{
+            background-color: #f9f9f9; /* Alternate row color */
         }}
         .page-break {{
             page-break-after: always;
@@ -101,13 +99,35 @@ html_template = """
 </head>
 <body>
     <div class="container">
-        {pages}
+        {pages} <!-- Pages will be inserted here -->
+        <div class="empty-lines"></div> <!-- Empty lines added only at the bottom -->
     </div>
 </body>
 </html>
 """
 
-# Function to generate content for a page
+# Function to generate CSV table
+def generate_csv_table(csv_data):
+    if not csv_data:
+        return ""
+    header = csv_data[0]
+    rows = csv_data[1:]
+
+    # Build table rows
+    header_html = "<tr>" + "".join(f"<th>{col}</th>" for col in header) + "</tr>"
+    rows_html = "".join(
+        "<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in rows
+    )
+
+    # Return complete table
+    return f"""
+    <table class="data-table">
+        {header_html}
+        {rows_html}
+    </table>
+    """
+
+# Function to generate a single page's HTML
 def generate_page(name_1, name_2, title, company_logo, markdown_html, csv_html, date=None):
     if date is None:
         date = datetime.now().strftime('%Y-%m-%d')
@@ -135,47 +155,36 @@ def generate_page(name_1, name_2, title, company_logo, markdown_html, csv_html, 
     </div>
     """
 
-# Function to add content to specific pages
-def add_content_to_page(content_type, page_number, content, pages_dict):
-    if content_type == "markdown":
-        pages_dict[page_number]["markdown"] = content
-    elif content_type == "csv":
-        pages_dict[page_number]["csv"] = content
-    else:
-        raise ValueError("Content type must be 'markdown' or 'csv'.")
-
-# Main function to generate the report
+# Function to generate the HTML report
 def generate_html_report(files_info, name_1, name_2, title, company_logo):
-    # Dictionary to hold content for each page (markdown and csv)
-    pages_dict = {1: {"markdown": "", "csv": ""}, 2: {"markdown": "", "csv": ""}, 3: {"markdown": "", "csv": ""}}
-
-    # Process each file info
-    for file_info in files_info:
-        for file_type, file_data in file_info.items():
-            file_name, page_number = file_data
-            if file_type.startswith('md'):
-                markdown_html = convert_markdown_to_html(file_name)
-                add_content_to_page("markdown", page_number, markdown_html, pages_dict)
-            elif file_type.startswith('csv'):
-                csv_html = convert_csv_to_html(file_name)
-                add_content_to_page("csv", page_number, csv_html, pages_dict)
-    
-    # Generate the HTML content for each page
     pages = ""
-    for page_number in range(1, 4):
-        page_content = generate_page(
-            name_1, 
-            name_2, 
-            title, 
-            company_logo, 
-            pages_dict[page_number]["markdown"], 
-            pages_dict[page_number]["csv"]
-        )
-        pages += page_content
-    
-    # Create final HTML content
+    for file_info in files_info:
+        for file, info in file_info.items():
+            file_type = file.split('.')[-1]
+            filename = info[0]
+            page = info[1]
+
+            # Initialize markdown_html and csv_html to empty strings
+            markdown_html = ""
+            csv_html = ""
+
+            # Read the content of markdown or csv file
+            if file_type == 'md':
+                with open(filename, 'r') as md_file:
+                    markdown_content = md_file.read()
+                    markdown_html = f"<h2>{filename}</h2><div>{markdown_content}</div>"
+            elif file_type == 'csv':
+                with open(filename, 'r') as csv_file:
+                    csv_reader = csv.reader(csv_file)
+                    csv_data = list(csv_reader)
+                    csv_html = generate_csv_table(csv_data)
+
+            # Generate page for the content
+            pages += generate_page(name_1, name_2, title, company_logo, markdown_html, csv_html)
+
+    # Create final HTML
     final_html = html_template.format(pages=pages)
-    
+
     # Save to an HTML file
     with open("output.html", "w", encoding="utf-8") as file:
         file.write(final_html)
