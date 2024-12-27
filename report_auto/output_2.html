@@ -62,11 +62,11 @@
             color: #333;
         }
         .content h1 {
-            font-size: 16px;
+            font-size: 17px;
             margin-top: 0;
         }
         .content h2 {
-            font-size: 14px;
+            font-size: 15px;
             margin-top: 0;
         }
         .content h3 {
@@ -164,8 +164,8 @@
 <h3>Load Calculations</h3>
 <p>The applied loads on the beam include dead loads, live loads, and additional external forces. These loads are summarized as follows:</p>
 <ul>
-<li>Dead load: 10 kN/m</li>
-<li>Live load: 5 kN/m</li>
+<li>Dead load: {{dead_load}} kN/m</li>
+<li>Live load: {{live_load}} kN/m</li>
 </ul>
 <hr />
 <h3>Design Results</h3>
@@ -225,7 +225,22 @@
             </div>
         </div>
         <div class="content">
-            <table class="data-table"><tr><th>Load Type</th><th> Value</th><th> Units</th></tr><tr><td>Dead Load</td><td> 10</td><td> kN/m</td></tr><tr><td>Live Load</td><td> 5</td><td> kN/m</td></tr><tr><td>Point Load</td><td> 15</td><td> kN/m</td></tr></table>
+            <h1>RC Beam Design Calculation</h1>
+<h2>Introduction</h2>
+<p>This document outlines the design calculations for an RC beam, considering various design parameters.</p>
+<hr />
+<h3>Load Calculations</h3>
+<p>The applied loads on the beam include dead loads, live loads, and additional external forces. These loads are summarized as follows:</p>
+<ul>
+<li>Dead load: 1000 kN/m</li>
+<li>Live load: 500 kN/m</li>
+</ul>
+<hr />
+<h3>Design Results</h3>
+<ul>
+<li>Moment capacity: 50 kNm</li>
+<li>Shear capacity: 20 kN</li>
+</ul><table class="data-table"><tr><th>Load Type</th><th> Value</th><th> Units</th></tr><tr><td>Dead Load</td><td> 10</td><td> kN/m</td></tr><tr><td>Live Load</td><td> 5</td><td> kN/m</td></tr><tr><td>Point Load</td><td> 15</td><td> kN</td></tr></table>
         </div>
         <div class="empty-lines"></div>
     </div>

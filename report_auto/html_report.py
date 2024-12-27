@@ -213,11 +213,11 @@ html_template = """
             color: #333;
         }}
         .content h1 {{
-            font-size: 16px;
+            font-size: 17px;
             margin-top: 0;
         }}
         .content h2 {{
-            font-size: 14px;
+            font-size: 15px;
             margin-top: 0;
         }}
         .content h3 {{

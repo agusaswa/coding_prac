@@ -10,8 +10,8 @@ This document outlines the design calculations for an RC beam, considering vario
 
 The applied loads on the beam include dead loads, live loads, and additional external forces. These loads are summarized as follows:
 
-- Dead load: {{dead_load}} kN/m
-- Live load: {{live_load}} kN/m
+- Dead load: 1000 kN/m
+- Live load: 500 kN/m
 
 ---
 
