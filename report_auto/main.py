@@ -11,16 +11,11 @@ files_info = [
     {
         "md_file_2": ["example2.md", 2],
         "csv_file_2": ["data2.csv", 2],
-    },
-        {
-        "md_file_2": ["example1.md", 3],
-        "csv_file_2": ["data1.csv", 3],
-    },
+    }
 ]
 
 # Define pages_dict outside the function
 pages_dict = {1: {"markdown": "", "csv": "", "orientation": "portrait"},
-              2: {"markdown": "", "csv": "", "orientation": "portrait"},
-              3: {"markdown": "", "csv": "", "orientation": "portrait"}}
+              2: {"markdown": "", "csv": "", "orientation": "landscape"}}
 
 html_report.generate_html_report(files_info, name_1, name_2, title, company_logo, pages_dict)

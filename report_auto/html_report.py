@@ -124,7 +124,6 @@ def generate_html_report(files_info, name_1, name_2, title, company_logo, pages_
         file.write(final_html)
     print("HTML file generated: output.html")
 
-
 # Define the template outside the function
 html_template = """
 <!DOCTYPE html>
