@@ -91,7 +91,7 @@ def add_content_to_page(content_type, page_number, content, pages_dict):
         print(f"Page number {page_number} not found in pages_dict.")
 
 # Example usage in your generate_html_report function
-def generate_html_report(files_info, name_1, name_2, title, company_logo, pages_dict):
+def generate_html_report(files_info, name_1, name_2, title, company_logo, pages_dict, suffix):
     # Process each file info
     for file_info in files_info:
         for file_type, file_data in file_info.items():
@@ -120,9 +120,33 @@ def generate_html_report(files_info, name_1, name_2, title, company_logo, pages_
     final_html = html_template.format(pages=pages)
     
     # Save to an HTML file
-    with open("output.html", "w", encoding="utf-8") as file:
+    with open(f"output_{suffix}.html", "w", encoding="utf-8") as file:
         file.write(final_html)
-    print("HTML file generated: output.html")
+    print(f"HTML file generated: output_{suffix}.html")
+
+def create_page(total_page, ori_key="P"):
+    """
+    Generate a dictionary for pages with the specified orientation for each page in the range.
+    
+    :param start_page: The starting page number.
+    :param end_page: The ending page number.
+    :param orientation: The orientation for all pages ("portrait" or "landscape").
+    :return: A dictionary with page numbers as keys and corresponding orientation values.
+    """
+    # Initialize an empty dictionary
+    pages_dict = {}
+    orientation = {"P": "portrait", "L": "landscape"}
+    
+    # Loop through the range of page numbers and assign the specified orientation
+    for page in range(1, total_page + 1):
+        pages_dict[page] = {
+            "markdown": "",
+            "csv": "",
+            "orientation": orientation[ori_key]
+        }
+
+    return pages_dict
+
 
 # Define the template outside the function
 html_template = """
@@ -171,7 +195,7 @@ html_template = """
             margin-bottom: 20px;
         }}
         .header .details {{
-            font-size: 11px;
+            font-size: 10px;
         }}
         .header .details p {{
             margin: 0;
@@ -184,24 +208,24 @@ html_template = """
             width: auto;
         }}
         .content {{
-            font-size: 11px;
+            font-size: 10px;
             line-height: 1.6;
             color: #333;
         }}
         .content h1 {{
-            font-size: 16px;
-            margin-top: 0;
-        }}
-        .content h2 {{
             font-size: 14px;
             margin-top: 0;
         }}
+        .content h2 {{
+            font-size: 12px;
+            margin-top: 0;
+        }}
         .content h3 {{
-            font-size: 13px;
+            font-size: 11px;
             margin-top: 0;
         }}
         .content h4 {{
-            font-size: 12px;
+            font-size: 10px;
             margin-top: 0;
         }}
         .content .data-table {{
@@ -230,7 +254,7 @@ html_template = """
             page-break-after: always;
         }}
         .empty-lines {{
-            height: 200px; /* Adjust for approximately 10 empty lines */
+            height: 30px; /* Adjust for approximately 3 empty lines */
         }}
 
         /* Hide the outer border of the container when printing */
