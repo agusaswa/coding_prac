@@ -158,13 +158,13 @@ html_template = """
             font-family: Tahoma, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: white;
         }}
         .container {{
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
+            background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
         }}
@@ -176,15 +176,15 @@ html_template = """
             width: 800px;
             height: auto;
             padding-right: 20px; /* Add padding to ensure content doesn't touch the right edge */
-            margin: 0 auto; /* Center the content */
+            margin: 0 auto;
         }}
         .landscape {{
             width: 100%;
             height: auto;
             padding-left: 40px; /* Add padding to ensure content doesn't touch the left edge */
-            padding-right: 40px; /* Add padding to ensure content doesn't touch the right edge */
-            box-sizing: border-box; /* Include padding in the element's total width calculation */
-            margin: 0 auto; /* Center align the content */
+            padding-right: 40px;
+            box-sizing: border-box;
+            margin: 0 auto;
         }}
         .header {{
             display: flex;
@@ -195,7 +195,7 @@ html_template = """
             margin-bottom: 20px;
         }}
         .header .details {{
-            font-size: 10px;
+            font-size: 11px;
         }}
         .header .details p {{
             margin: 0;
@@ -204,63 +204,90 @@ html_template = """
             text-align: right;
         }}
         .header .logo img {{
-            height: 75px;
+            height: 65px;
             width: auto;
         }}
         .content {{
-            font-size: 10px;
+            font-size: 11px;
             line-height: 1.6;
             color: #333;
         }}
         .content h1 {{
-            font-size: 14px;
+            font-size: 16px;
             margin-top: 0;
         }}
         .content h2 {{
-            font-size: 12px;
+            font-size: 14px;
             margin-top: 0;
         }}
         .content h3 {{
-            font-size: 11px;
+            font-size: 13px;
             margin-top: 0;
         }}
         .content h4 {{
-            font-size: 10px;
+            font-size: 12px;
             margin-top: 0;
         }}
+
+        /* Updated table styles */
         .content .data-table {{
-            width: auto; /* Let the table take up only as much space as the content requires */
+            width: auto;
             margin: 20px 0;
             font-size: 11px;
             text-align: left;
-            overflow-x: auto; /* Handle overflow on wide tables */
-            table-layout: auto; /* Allow columns to adjust width based on content */
+            overflow-x: auto;
+            table-layout: fixed; /* Fixed table layout prevents auto column width adjustment */
+            border-collapse: collapse; /* Ensures borders don't double up */
+            max-width: 100%; /* Ensure table doesn't exceed the page width */
         }}
+
+        /* Limit table width */
         .content .data-table th, .content .data-table td {{
-            border: 1px solid #000;
+            border: 1px solid #ddd;
             padding: 8px;
+            max-width: 80px; /* Limit column width */
+            word-wrap: break-word; /* Prevents overflow */
         }}
+
+        /* First row with light gray background */
+        .content .data-table tr:first-child {{
+            background-color: #f2f2f2; /* Light gray */
+        }}
+
+        /* Header row text alignment */
         .content .data-table th {{
-            background-color: #f4f4f4;
-            font-weight: bold;
+            text-align: left;
+            padding-right: 10px; /* Allow for a small space between header text and column edge */
         }}
-        .content .data-table td {{
-            background-color: #fff;
+
+        /* Optional: Row hover effect (screen only) */
+        .content .data-table tr:not(:first-child):hover {{
+            background-color: #f9f9f9; /* Slightly lighter background on hover */
         }}
-        .content .data-table tr:nth-child(even) td {{
-            background-color: #f9f9f9;
-        }}
+
         .page-break {{
             page-break-after: always;
         }}
-        .empty-lines {{
-            height: 30px; /* Adjust for approximately 3 empty lines */
-        }}
 
-        /* Hide the outer border of the container when printing */
+        /* Print styling */
         @media print {{
             .container {{
-                border: none; /* Remove border from the container when printing */
+                border: none;
+            }}
+            .content .data-table {{
+                width: 100%; /* Ensure table fits well for print */
+                border: none; /* Removes border box around the table */
+                overflow-x: auto; /* Handle overflow on wide tables */
+                table-layout: fixed; /* Keeps columns from expanding too much */
+                border-collapse: collapse; /* Ensure borders don't double up */
+            }}
+            .content .data-table td, .content .data-table th {{
+                border: 1px solid #ddd; /* Ensures internal borders for print */
+                padding: 8px; /* Ensures consistent padding */
+                background-color: transparent; /* Make sure background color is transparent */
+            }}
+            .content .data-table tr:first-child {{
+                background-color: #f2f2f2; /* Ensures first row is light gray in print */
             }}
         }}
     </style>
